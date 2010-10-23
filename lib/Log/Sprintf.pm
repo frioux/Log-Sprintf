@@ -20,7 +20,7 @@ sub formatter {
      $self->{formatter} = String::Formatter->new({
        input_processor => 'require_single_input',
        string_replacer => 'method_replace',
-       codes => $self->codes,
+       codes => $self->_codes,
      });
   }
   return $self->{formatter}
@@ -45,7 +45,9 @@ sub sprintf {
    return $ret
 }
 
-sub codes {
+sub codes { +{} }
+
+sub _codes {
   return {
     C => 'package',
     c => 'category',
@@ -61,6 +63,7 @@ sub codes {
     p => 'priority',
     r => 'milliseconds_since_start',
     R => 'milliseconds_since_last_log',
+    %{$_[0]->codes},
   }
 }
 
