@@ -11,12 +11,24 @@ use Log::Sprintf;
 
 my $log_formatter = Log::Sprintf->new({
    category => 'DeployMethod',
-   format   => '[%p][%c] %m',
+   format   => '[%L][%p][%c] %m',
 });
 
-is($log_formatter->sprintf({
+my $args = {
   priority => 'trace',
   message => 'starting connect',
-}), '[trace][DeployMethod] starting connect', 'log formats correctly');
+};
+
+is($log_formatter->sprintf($args), '[' . __LINE__ . '][trace][DeployMethod] starting connect', 'log formats correctly');
+
+sub log_awesome {
+   $log_formatter->sprintf({
+     caller_depth => 5,
+     priority => 'trace',
+     message => 'starting connect',
+   })
+}
+
+is(log_awesome(), '[' . __LINE__ . '][trace][DeployMethod] starting connect', 'log depths correctly');
 
 done_testing;

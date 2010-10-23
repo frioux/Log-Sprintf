@@ -10,6 +10,7 @@ sub new {
    my $self = bless $_[1]||{}, $_[0];
    $self->{last_event} = [ gettimeofday ];
    $self->{start_time} = [ gettimeofday ];
+   $self->{caller_depth} ||= 4;
    return $self
 }
 
@@ -28,6 +29,9 @@ sub formatter {
 sub sprintf {
    my $self = shift;
    my $args = shift;
+
+   local $self->{caller_depth} = $args->{caller_depth}
+      if defined $args->{caller_depth};
 
    local $self->{category} = $args->{category} if defined $args->{category};
    local $self->{format}   = $args->{format}   if defined $args->{format};
@@ -82,7 +86,7 @@ sub message { shift->{'message'} }
 
 sub priority { shift->{priority} }
 
-sub _caller { [caller(4)] }
+sub _caller { [caller $_[0]->{caller_depth}] }
 
 sub date {
  my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime;
