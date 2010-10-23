@@ -35,9 +35,9 @@ sub sprintf {
 
    local $self->{category} = $args->{category} if defined $args->{category};
    local $self->{format}   = $args->{format}   if defined $args->{format};
+   local $self->{priority} = $args->{priority} if defined $args->{priority};
 
    local $self->{message}  = $args->{message};
-   local $self->{priority} = $args->{priority};
 
    my $ret = $self->_formatter->format($self->{format}, $self);
    $self->{last_event} = [ gettimeofday ];
