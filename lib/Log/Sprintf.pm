@@ -293,6 +293,14 @@ C<R> - L</milliseconds_since_last_log>
 Takes the exact same arguments as L</new> with the additional C<message>
 argument.  Returns a formatted string.
 
+=head1 SUBCLASSING
+
+This module was designed from the start to be subclassed.  All you need to know
+to subclass it (to add or change formatting codes) is that the C<codes>
+subroutine should be defined in your subclass, and should return a hashref
+where keys are codes and values are the names of methods your class defines to
+fill in the values of those codes.
+
 =head1 MESSAGE METHODS
 
 =head2 milliseconds_since_start
