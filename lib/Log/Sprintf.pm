@@ -105,7 +105,23 @@ sub priority {
    $p;
 }
 
-sub _caller { [caller(($_[0]->{caller_depth}||0) + 4)] }
+sub _caller {
+   my $self = shift;
+   my $depth = $self->{caller_depth} || 0;
+   my $clan  = $self->{caller_clan};
+
+   $depth += 3;
+
+   if (defined $clan) {
+
+      my $c; do {
+         $c = caller ++$depth;
+      } while $c && $c =~ $clan;
+      return [caller $depth]
+   } else {
+      return [caller $depth]
+   }
+}
 
 sub date {
  my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime;
@@ -187,13 +203,14 @@ know.
 
  my $log_formatter = Log::Sprintf->new({
    caller_depth => 1,
+   caller_clan  => '^Log::Sprintf',
    category     => 'WebServer',
    format       => '[%L][%C] %m',
    priority     => 'trace',
  })
 
-returns a freshly instantiated C<Log::Sprintf> object.  Currently it has four
-options, none of which are required.
+returns a freshly instantiated C<Log::Sprintf> object.  Currently it has the
+following options, none of which are required.
 
 =head3 arguments
 
@@ -202,6 +219,11 @@ options, none of which are required.
 =item *
 
 format - the format to use for logging.  See </formats> for what's available.
+
+=item *
+
+caller_clan - if defined, caller will be called with increasing depth while
+the package matches C<caller_clan>.  Depth begines at C<caller_depth>.
 
 =item *
 
