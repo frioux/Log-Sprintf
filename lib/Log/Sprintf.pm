@@ -85,9 +85,24 @@ sub subroutine { shift->_caller->[3] }
 
 sub category { shift->{category} }
 
-sub message { shift->{'message'} }
+sub message {
+   my $self  = shift;
+   my $chomp = shift;
+   my $m     = $self->{message};
 
-sub priority { shift->{priority} }
+   chomp $m if defined $chomp && $chomp eq 'chomp';
+
+   $m
+}
+
+sub priority {
+   my $self   = shift;
+   my $skinny = shift;
+   my $p      = $self->{priority};
+
+   return substr $p, 0, 1 if $skinny;
+   $p;
+}
 
 sub _caller { [caller $_[0]->{caller_depth}] }
 
