@@ -14,7 +14,7 @@ sub new {
    return $self
 }
 
-sub formatter {
+sub _formatter {
   my $self = shift;
   if (!defined $self->{formatter}) {
      $self->{formatter} = String::Formatter->new({
@@ -39,7 +39,7 @@ sub sprintf {
    local $self->{message}  = $args->{message};
    local $self->{priority} = $args->{priority};
 
-   my $ret = $self->formatter->format($self->{format}, $self);
+   my $ret = $self->_formatter->format($self->{format}, $self);
    $self->{last_event} = [ gettimeofday ];
 
    return $ret
