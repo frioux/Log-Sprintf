@@ -31,7 +31,7 @@ is($log_formatter->sprintf({
 
 sub log_awesome {
    $log_formatter->sprintf({
-     caller_depth => 5,
+     caller_depth => 1,
      priority => 'trace',
      message => 'starting connect',
    })

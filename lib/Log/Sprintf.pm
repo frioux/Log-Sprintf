@@ -12,7 +12,6 @@ sub new {
    my $self = bless $_[1]||{}, $_[0];
    $self->{last_event} = [ gettimeofday ];
    $self->{start_time} = [ gettimeofday ];
-   $self->{caller_depth} ||= 4;
    return $self
 }
 
@@ -106,7 +105,7 @@ sub priority {
    $p;
 }
 
-sub _caller { [caller $_[0]->{caller_depth}] }
+sub _caller { [caller(($_[0]->{caller_depth}||0) + 4)] }
 
 sub date {
  my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime;
@@ -187,7 +186,7 @@ know.
 =head2 new
 
  my $log_formatter = Log::Sprintf->new({
-   caller_depth => 4,
+   caller_depth => 1,
    category     => 'WebServer',
    format       => '[%L][%C] %m',
    priority     => 'trace',
