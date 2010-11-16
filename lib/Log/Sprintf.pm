@@ -97,8 +97,10 @@ sub newline() { "\n" }
  });
 
  $log_formatter->sprintf({
+   line     => 123,
+   package  => 'foo',
    priority => 'trace',
-   message => 'starting connect',
+   message  => 'starting connect',
  });
 
 Or to add or override flags, make a subclass and use it instead:
@@ -126,23 +128,20 @@ and elsewhere...
 =head1 DESCRIPTION
 
 This module is meant as a I<mostly> drop in replacement for the log formatting
-system that L<Log::log4perl> uses; it doesn't bring in all of the (mostly
-worthwhile) weight of C<Log::log4perl> and allows you to add new flags in
-subclasses.
+system that L<Log::log4perl> uses; it doesn't bring in all of the weight of
+C<Log::log4perl> and allows you to add new flags in subclasses.
 
 =head1 DIFFERENCES FROM LOG4PERL
 
 Instead of C<%p{1}> for a single character priority, this uses C<%{1}p>.
 Similarly, instead of C<%m{chomp}> for a message with a trailing newline
-removed, this uses C<%{chomp}m>.  Currently C<%T> is not supported, as I'm not
-quite sure the right way to do it.  If you have thoughts and/or care, let me
-know.
+removed, this uses C<%{chomp}m>.
+
+=head1 METHODS
 
 =head2 new
 
  my $log_formatter = Log::Sprintf->new({
-   caller_depth => 1,
-   caller_clan  => '^Log::Sprintf',
    category     => 'WebServer',
    format       => '[%L][%C] %m',
    priority     => 'trace',
@@ -157,24 +156,59 @@ following options, none of which are required.
 
 =item *
 
-format - the format to use for logging.  See </formats> for what's available.
+C<format> - the format to use for logging.  See L</formats> for what's available.
 
 =item *
 
-caller_clan - if defined, caller will be called with increasing depth while
-the package matches C<caller_clan>.  Depth begines at C<caller_depth>.
+C<category> - what category we are logging to
 
 =item *
 
-caller_depth - how deep in the call stack to look for line number, file, etc
+C<priority> - the priority or level we are logging to (trace, debug, etc)
 
 =item *
 
-category - what category we are logging to
+C<package> - the package you are logging from
 
 =item *
 
-priority - the priority or level we are logging to (trace, debug, etc)
+C<date> - the date the log happened
+
+=item *
+
+C<file> - the file you are logging from
+
+=item *
+
+C<host> - the host you are logging from
+
+=item *
+
+C<line> - the line you are logging from
+
+=item *
+
+C<subroutine> - the subroutine you are logging from
+
+=item *
+
+C<pid> - the pid you are logging from
+
+=item *
+
+C<priority> - the priority (level) you are logging at
+
+=item *
+
+C<milliseconds_since_start> - milliseconds since program start
+
+=item *
+
+C<milliseconds_since_last_log> -milliseconds since previous log
+
+=item *
+
+C<stacktrace> - full stacktrace
 
 =back
 
@@ -246,12 +280,18 @@ C<r> - L</milliseconds_since_start>
 
 C<R> - L</milliseconds_since_last_log>
 
+=item *
+
+C<T> - L</stacktrace>
+
 =back
 
-=method sprintf
+=head2 sprintf
 
 Takes the exact same arguments as L</new> with the additional C<message>
-argument.  Returns a formatted string.
+argument.  Returns a formatted string.  Note that if a flag is included in your
+format but its corresponding value is not included in the call to sprintf you
+will get lots of warnings.
 
 =head1 SUBCLASSING
 
@@ -273,19 +313,19 @@ returns milliseconds since last log
 
 =head2 line
 
-returns line at caller depth
+returns line
 
 =head2 file
 
-returns file at caller depth
+returns file
 
 =head2 package
 
-returns package at caller depth
+returns package
 
 =head2 subroutine
 
-returns subroutine at caller depth
+returns subroutine
 
 =head2 category
 
@@ -293,13 +333,12 @@ returns category
 
 =head2 message
 
-returns message, and if passed "chomp" it will remove a trailing newline from
+returns message; if passed "chomp" it will remove a trailing newline from
 message
 
 =head2 priority
 
-returns priority, and if passed a true value it will only return the first
-character
+returns priority; if passed a true value it will only return the first character
 
 =head2 date
 
@@ -320,3 +359,15 @@ returns newline
 =head2 pid
 
 returns process id
+
+=head1 SEE ALSO
+
+=over 2
+
+=item L<Log::Log4perl>
+
+this module has a lot of really neat ideas
+
+=item L<Log::Structured>
+
+you can use this module to fill in the values for L</sprintf>
