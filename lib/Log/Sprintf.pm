@@ -370,4 +370,6 @@ this module has a lot of really neat ideas
 
 =item L<Log::Structured>
 
+=back
+
 you can use this module to fill in the values for L</sprintf>
