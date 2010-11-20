@@ -7,6 +7,7 @@ use warnings;
 
 use String::Formatter;
 use syntax 'junction';
+use POSIX 'strftime';
 
 my %codes = (
   C => 'package',
@@ -55,12 +56,14 @@ sub _codes { return { %codes, %{$_[0]->codes} } }
 {
   no strict 'refs';
   for my $name (
-    grep { $_ eq none(qw( message priority newline location )) }
+    grep { $_ eq none(qw( stacktrace date message priority newline location )) }
     values %codes
   ) {
     *{$name} = sub { shift->{$name} }
   }
 }
+
+sub date { strftime('%F %T', @{$_[0]->{date}}) }
 
 sub message {
    my $self  = shift;
@@ -84,6 +87,14 @@ sub priority {
 sub location { "$_[0]->{subroutine} ($_[0]->{file}:$_[0]->{line})" }
 
 sub newline() { "\n" }
+
+sub stacktrace {
+   my $s = $_[0]->{stacktrace};
+   "$s->[0][1] line $s->[0][2]\n" .
+      join "\n",
+      map "\t$_->[3] called at $_->[1] line $_->[2]",
+      @{$s}[1..$#$s] # all but the first level
+}
 
 1;
 
@@ -340,9 +351,9 @@ message
 
 returns priority; if passed a true value it will only return the first character
 
-=head2 date
+=head2 date_str
 
-returns date
+returns date formatted as YYYY-MM-DD HH:MM:SS
 
 =head2 host
 
