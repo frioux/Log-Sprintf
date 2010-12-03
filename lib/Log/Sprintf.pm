@@ -215,7 +215,7 @@ C<milliseconds_since_start> - milliseconds since program start
 
 =item *
 
-C<milliseconds_since_last_log> -milliseconds since previous log
+C<milliseconds_since_last_log> - milliseconds since previous log
 
 =item *
 
@@ -237,7 +237,7 @@ C<c> - L</category>
 
 =item *
 
-C<d> - L</date>
+C<d> - L</date>, in the format of localtime or gmtime
 
 =item *
 
@@ -293,7 +293,8 @@ C<R> - L</milliseconds_since_last_log>
 
 =item *
 
-C<T> - L</stacktrace>
+C<T> - L</stacktrace>, an arrayref of arrayrefs in the format of
+C<< caller($x) >>, ordered by deeper to shallower in the trace
 
 =back
 
