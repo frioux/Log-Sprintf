@@ -96,6 +96,8 @@ sub stacktrace {
       @{$s}[1..$#$s] # all but the first level
 }
 
+sub format { $_[0]->{format} }
+
 1;
 
 =pod
@@ -304,6 +306,10 @@ Takes the exact same arguments as L</new> with the additional C<message>
 argument.  Returns a formatted string.  Note that if a flag is included in your
 format but its corresponding value is not included in the call to sprintf you
 will get lots of warnings.
+
+=head2 format
+
+Returns the current format
 
 =head1 SUBCLASSING
 
