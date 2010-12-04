@@ -9,6 +9,8 @@ my $log_formatter = Log::Sprintf->new({
    format   => '[%p][%c] %m',
 });
 
+is $log_formatter->format, '[%p][%c] %m', 'format gets stored correctly';
+
 my $args = {
   priority => 'trace',
   message => 'starting connect',
@@ -77,6 +79,19 @@ is($log_formatter->sprintf({
       message => 'lol',
       stacktrace => $st,
    }), "lol at $trace", 'stacktrace formats correctly');
+}
+
+{
+   my $loc_formatter = Log::Sprintf->new({
+      format   => '[%l] %m',
+   });
+
+   is($loc_formatter->sprintf({
+      message    => 'lol',
+      subroutine => 'foo',
+      file       => 'foo.t',
+      line       => 35,
+   }), '[foo (foo.t:35)] lol', 'location formats correctly');
 }
 
 done_testing;
