@@ -59,13 +59,20 @@ sub _codes { return { %codes, %{$_[0]->codes} } }
     grep { $_ eq none(qw( stacktrace date message priority newline location )) }
     values %codes
   ) {
-    *{$name} = sub { shift->{$name} }
+    *{$name} = sub {
+      die "you forgot to pass $name" unless exists $_[0]->{$name};
+      $_[0]->{$name}
+    }
   }
 }
 
-sub date { strftime('%F %T', @{$_[0]->{date}}) }
+sub date {
+   die 'you forgot to pass date' unless exists $_[0]->{date};
+   strftime('%F %T', @{$_[0]->{date}})
+}
 
 sub message {
+   die 'you forgot to pass message' unless exists $_[0]->{message};
    my $self  = shift;
    my $chomp = shift;
    my $m     = $self->{message};
@@ -76,6 +83,7 @@ sub message {
 }
 
 sub priority {
+   die 'you forgot to pass priority' unless exists $_[0]->{priority};
    my $self   = shift;
    my $skinny = shift;
    my $p      = $self->{priority};
@@ -84,11 +92,16 @@ sub priority {
    $p;
 }
 
-sub location { "$_[0]->{subroutine} ($_[0]->{file}:$_[0]->{line})" }
+sub location {
+   exists $_[0]->{$_} or die "you forgot to pass $_"
+      for qw(subroutine file line);
+   "$_[0]->{subroutine} ($_[0]->{file}:$_[0]->{line})"
+}
 
 sub newline() { "\n" }
 
 sub stacktrace {
+   die 'you forgot to pass stacktrace' unless exists $_[0]->{stacktrace};
    my $s = $_[0]->{stacktrace};
    "$s->[0][1] line $s->[0][2]\n" .
       join "\n",

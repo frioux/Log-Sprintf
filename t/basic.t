@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Fatal;
 use Log::Sprintf;
 
 my $log_formatter = Log::Sprintf->new({
@@ -21,13 +22,25 @@ is($log_formatter->sprintf($args), '[trace][DeployMethod] starting connect', 'lo
 is($log_formatter->sprintf({
    message => 'x',
    priority => 'trace',
-   format => ']%{1}p[ %m',
+   format => ']%{1}p[ %{useless}m',
 }), ']t[ x', 'log formats correctly with arguments passed to method');
 
 is($log_formatter->sprintf({
    message => "woot\n",
    format => '%{chomp}m',
 }), 'woot', 'chomp option for %m works');
+
+ok exception { $log_formatter->sprintf({ message => 'x', format => '%L' }) },
+   'checking accessors for plain accessor works';
+
+for (
+   [l => 'location'], [m => 'message'], [d => 'date'],
+   [p => 'priority'], [T => 'stacktrace']
+) {
+   ok exception {
+      $log_formatter->sprintf({ format => "%$_->[0]" })
+   }, "checking accessors for $_->[1] works";
+}
 
 {
    my $date_formatter = Log::Sprintf->new({
