@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.001001  2010-12-09 13:05:55 CST6CDT
   - Take out POSIX::strftime as it breaks on win32
 
 0.001000  2010-12-07 22:59:22 CST6CDT
