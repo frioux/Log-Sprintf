@@ -49,7 +49,7 @@ for (
 
    is($date_formatter->sprintf({
       message => 'lol',
-      date    => [1, 2, 3, 4, 5, 106],
+      date    => [1, 2, 3, 4, 5, 106, 1, 341, 1],
    }), '[2006-06-04 03:02:01] lol', 'date formats correctly');
 }
 
