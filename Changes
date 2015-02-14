@@ -1,14 +1,13 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-  - Ditch RT
+ - Ditch RT
 
 0.001002  2012-11-17 15:38:56 CST6CDT
-       - Put MetaYAML back in dist
+ - Put MetaYAML back in dist
 
 0.001001  2010-12-09 13:05:55 CST6CDT
-  - Take out POSIX::strftime as it breaks on win32
+ - Take out POSIX::strftime as it breaks on win32
 
 0.001000  2010-12-07 22:59:22 CST6CDT
-  - Initial Release
-
+ - Initial Release
