@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.001003  2015-02-13 22:45:01-06:00 America/Chicago
  - Make error messages more useful by including more info (Fixes GH#1)
  - Ditch RT
 
