@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ - Make error messages more useful by including more info (Fixes GH#1)
  - Ditch RT
 
 0.001002  2012-11-17 15:38:56 CST6CDT

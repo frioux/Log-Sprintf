@@ -59,14 +59,18 @@ sub _codes { return { %codes, %{$_[0]->codes} } }
     values %codes
   ) {
     *{$name} = sub {
-      die "you forgot to pass $name" unless exists $_[0]->{$name};
+      die "you forgot to pass $name; passed params were: " .
+         join(', ', keys %{$_[0]})
+            unless exists $_[0]->{$name};
       $_[0]->{$name}
     }
   }
 }
 
 sub date {
-   die 'you forgot to pass date' unless exists $_[0]->{date};
+   die 'you forgot to pass date; passed params were: ' .
+      join(', ', keys %{$_[0]})
+         unless exists $_[0]->{date};
 
    my @date = @{$_[0]->{date}};
    splice @date, 6, 3;
@@ -76,7 +80,9 @@ sub date {
 }
 
 sub message {
-   die 'you forgot to pass message' unless exists $_[0]->{message};
+   die 'you forgot to pass message; passed params were: ' .
+      join(', ', keys %{$_[0]})
+         unless exists $_[0]->{message};
    my $self  = shift;
    my $chomp = shift;
    my $m     = $self->{message};
@@ -87,7 +93,10 @@ sub message {
 }
 
 sub priority {
-   die 'you forgot to pass priority' unless exists $_[0]->{priority};
+   die 'you forgot to pass priority; passed params were: ' .
+      join(', ', keys %{$_[0]})
+         unless exists $_[0]->{priority};
+
    my $self   = shift;
    my $skinny = shift;
    my $p      = $self->{priority};
@@ -97,15 +106,18 @@ sub priority {
 }
 
 sub location {
-   exists $_[0]->{$_} or die "you forgot to pass $_"
-      for qw(subroutine file line);
+   exists $_[0]->{$_} or die "you forgot to pass $_; passed params were: " .
+      join(', ', keys %{$_[0]})
+         for qw(subroutine file line);
    "$_[0]->{subroutine} ($_[0]->{file}:$_[0]->{line})"
 }
 
 sub newline() { "\n" }
 
 sub stacktrace {
-   die 'you forgot to pass stacktrace' unless exists $_[0]->{stacktrace};
+   die 'you forgot to pass stacktrace: ' .
+      join(', ', keys %{$_[0]})
+         unless exists $_[0]->{stacktrace};
    my $s = $_[0]->{stacktrace};
    "$s->[0][1] line $s->[0][2]\n" .
       join "\n",
