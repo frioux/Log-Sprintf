@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Ditch RT
 
 0.001002  2012-11-17 15:38:56 CST6CDT
        - Put MetaYAML back in dist
